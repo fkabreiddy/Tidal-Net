@@ -44,6 +44,11 @@ and can lead to futher exceptions. Otherwise, Services folder is for microservic
         
 ```
 
+# Tips and Tricks
+
+- Since im using dynamic objects to extract the json data it may have some issues with the tidal api that sometimes return json values as null or json props wont return at all. So i tried so just keep with the basics (name, id, artists, cover etc) to minimize this error gap.
+- Also some albums with especial characters like ex: Motomami + arent able to be requested cuz the json deserializer is having some issues with this kind of chars
+
 
 # so whats next?
 
