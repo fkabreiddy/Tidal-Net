@@ -43,6 +43,7 @@ and can lead to futher exceptions. Otherwise, Services folder is for microservic
  }    
         
 ```
+By now download/clon this repo and copy the Auth and Data folders. With that you will be fine.
 
 # Tips and Tricks
 
