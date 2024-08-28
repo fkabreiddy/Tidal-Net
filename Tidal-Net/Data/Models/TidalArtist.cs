@@ -1,10 +1,10 @@
-﻿namespace Tidal_Net.Data.Models
+﻿using System.Text.Json.Serialization;
+
+namespace Tidal_Net.Data.Models;
+
+public class TidalArtist
 {
-    public class TidalArtist
-    {
-        public string Id { get; set; }
-        public string Name { get; set; }
-        public List<Picture> Picture { get; set; }
-        public bool Main { get; set; }
-    }
+    public string Id { get; set; } = string.Empty;
+    public string Name { get; set; } = string.Empty;
+    public List<string> ImageLinks { get; set; } = new();
 }

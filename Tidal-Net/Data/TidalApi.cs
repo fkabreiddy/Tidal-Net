@@ -1,73 +1,52 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
+﻿
+using System.Net.Http.Headers;
+using Tidal_Net.Authentication;
 
 namespace Tidal_Net.Data
 {
-    internal class TidalApi
+    internal  class TidalApi(string market = "US")
     {
-        public static async Task<string> Request(string endPoint, string accessToken)
+        private const string BaseUrl = "https://openapi.tidal.com/v2/";
+        private  readonly Auth _auth = new();
+        public async Task<TidalResult<object>> Request(string endPoint)
         {
             try
             {
-                var apiUrl = $"{Config.BaseUrl}{endPoint}?countryCode={Config.Market}";
 
-                HttpWebRequest webRequest = (HttpWebRequest)WebRequest.Create(apiUrl);
-                webRequest.Method = "GET";
-                webRequest.Accept = "application/vnd.tidal.v1+json";
-                webRequest.Headers.Add("Authorization: Bearer " + accessToken);
-                webRequest.ContentType = "application/vnd.tidal.v1+json";
+                if (_auth.GetMyToken() is null)
+                    return new("Initialize the auth class to get the access token from Tidal's api");
 
-                using (HttpWebResponse response = (HttpWebResponse)webRequest.GetResponse())
+             
+                
+                var apiUrl = $"{BaseUrl}{endPoint}";
+
+                using HttpClient client = new HttpClient();
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/vnd.tidal.v1+json"));
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _auth.GetMyToken());
+
+                HttpResponseMessage response = await client.GetAsync(apiUrl);
+
+                if (response.IsSuccessStatusCode)
                 {
-                    using (Stream respStream = response.GetResponseStream())
-                    {
-                        using (StreamReader reader = new StreamReader(respStream, Encoding.UTF8))
-                        {
-                            return reader.ReadToEnd();
-                           
-                           
-                        }
-                    }
+                    // Leer el contenido de la respuesta
+                    var value = await response.Content.ReadAsStringAsync();
+
+                    return new("Operation Successful", value, true);
+
                 }
-            }
-            catch(Exception e)
-            {
-                return e.InnerException?.Message ?? e.Message;
-            }
-        }
-        public static async Task<string> RequestMany(string endPoint, string accessToken)
-        {
-            try
-            {
-                var apiUrl = $"{Config.BaseUrl}{endPoint}&countryCode={Config.Market}";
-
-                HttpWebRequest webRequest = (HttpWebRequest)WebRequest.Create(apiUrl);
-                webRequest.Method = "GET";
-                webRequest.Accept = "application/vnd.tidal.v1+json";
-                webRequest.Headers.Add("Authorization: Bearer " + accessToken);
-                webRequest.ContentType = "application/vnd.tidal.v1+json";
-
-                using (HttpWebResponse response = (HttpWebResponse)webRequest.GetResponse())
+                else
                 {
-                    using (Stream respStream = response.GetResponseStream())
-                    {
-                        using (StreamReader reader = new StreamReader(respStream, Encoding.UTF8))
-                        {
-                            return reader.ReadToEnd();
-
-
-                        }
-                    }
+                    // Manejar el caso de error
+                    return new($"Error: {response.StatusCode} - {response.ReasonPhrase}");
                 }
             }
             catch (Exception e)
             {
-                return e.InnerException?.Message ?? e.Message;
+                return new(e.InnerException?.Message ?? e.Message);
             }
         }
+      
+
     }
 }

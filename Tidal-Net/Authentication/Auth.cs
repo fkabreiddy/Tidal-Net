@@ -1,14 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿
 using System.Net.Http.Headers;
 using System.Text;
-using System.Threading.Tasks;
+using Tidal_Net.Data;
 
 namespace Tidal_Net.Authentication
 {
     public class Auth
     {
+        public static AuthResponse? Token { get; private set; }
+     
         public static async Task<string> GetAccessTokenAsync(string clientId, string clientSecret)
         {
 
@@ -26,8 +26,15 @@ namespace Tidal_Net.Authentication
                 if (response.IsSuccessStatusCode)
                 {
                     string responseBody = await response.Content.ReadAsStringAsync();
-                    dynamic responseObject = Newtonsoft.Json.JsonConvert.DeserializeObject(responseBody);
-                    return responseObject.access_token;
+                    var responseObject = Newtonsoft.Json.JsonConvert.DeserializeObject<AuthResponse>(responseBody);
+
+                    if (responseObject is null || string.IsNullOrEmpty(responseObject.AccessToken))
+                        return "Not possible to get the access token from Tidal, please check credentials.";
+
+                    Token = responseObject;
+                  
+                    
+                    return responseObject.AccessToken;
                    
                 }
                 else
@@ -37,5 +44,9 @@ namespace Tidal_Net.Authentication
             }
 
         }
+
+        public string? GetMyToken() => Token?.AccessToken;
+
+        
     }
 }
