@@ -5,6 +5,10 @@
     <RootNamespace>Tidal_Net</RootNamespace>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <PackageId>TidalApi.Web</PackageId>
+    <Version>1.0.0</Version>
+    <Authors>Breiddy García (fkabreiddy)</Authors>
+    <Product>Tidal_Web_Api</Product>
   </PropertyGroup>
 
   <ItemGroup>
