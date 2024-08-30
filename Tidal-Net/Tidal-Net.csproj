@@ -9,15 +9,13 @@
     <Version>1.0.2</Version>
     <Authors>Breiddy García (fkabreiddy)</Authors>
     <Product>Tidal_Web_Api</Product>
-    <PackageReadmeFile>README.md</PackageReadmeFile>
-    <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+
     
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <None Include="README.md" Pack="true" PackagePath="\"/>
-    <None Include="LICENSE.txt" Pack="true" PackagePath="\"/>
 
   </ItemGroup>
 
