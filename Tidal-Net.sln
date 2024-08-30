@@ -5,8 +5,6 @@ VisualStudioVersion = 17.8.34330.188
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tidal-Net", "Tidal-Net\Tidal-Net.csproj", "{777EA84C-ADCF-43E4-8516-1FBBE09C03B5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApiTest", "ApiTest\ApiTest.csproj", "{9C52EE8A-B5CB-41A7-95D7-47B97C7D214E}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,10 +15,6 @@ Global
 		{777EA84C-ADCF-43E4-8516-1FBBE09C03B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{777EA84C-ADCF-43E4-8516-1FBBE09C03B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{777EA84C-ADCF-43E4-8516-1FBBE09C03B5}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9C52EE8A-B5CB-41A7-95D7-47B97C7D214E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9C52EE8A-B5CB-41A7-95D7-47B97C7D214E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9C52EE8A-B5CB-41A7-95D7-47B97C7D214E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9C52EE8A-B5CB-41A7-95D7-47B97C7D214E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

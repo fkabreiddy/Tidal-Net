@@ -1,6 +1,7 @@
 ﻿
 
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Tidal_Net.Data.Models
 {
@@ -8,67 +9,72 @@ namespace Tidal_Net.Data.Models
     {
         public string Id { get; set; } = string.Empty;
         public string Title { get; set; } = string.Empty;
-        public int NumberOfItems { get; set; }
+        public int NumberOfTracks { get; set; }
         public string BarcodeId { get; set; }
         public DateTime ReleaseDate { get; set; }
         public string Copyright { get; set; } = string.Empty;
         public List<string> ImageLinks { get; set; } = new();
         public List<TidalArtist> Artists { get; set; } = new();
         
-       public static List<TidalAlbum> CreateMany(string json)
+
+        public static List<TidalAlbum> CreateMany(string json)
         {
             var albumsToReturn = new List<TidalAlbum>();
 
             try
             {
-                var response = JsonConvert.DeserializeObject<dynamic>(json);
+                var response = JObject.Parse(json);
 
-                if (response is null)
+                var data = response["data"] as JArray;
+                if (data == null)
                     return albumsToReturn;
 
-                if (response.data == null)
-                    return albumsToReturn;
+                var included = response["included"] as JArray;
 
-                foreach (var albumData in response.data)
+                foreach (var albumData in data)
                 {
                     var newAlbum = new TidalAlbum
                     {
-                        Title = albumData.attributes?.title ?? "",
-                        BarcodeId = albumData.attributes?.barcodeId ?? "",
-                        NumberOfItems = albumData.attributes?.numberOfItems ?? 0,
-                        ReleaseDate = albumData.attributes?.releaseDate ?? DateTime.Now,
-                        Copyright = albumData.attributes?.copyright ?? "",
-                        Id = albumData.id ?? ""
+                        Title = albumData["attributes"]?["title"]?.ToString() ?? "",
+                        BarcodeId = albumData["attributes"]?["barcodeId"]?.ToString() ?? "",
+                        NumberOfTracks = albumData["attributes"]?["numberOfItems"]?.ToObject<int>() ?? 0,
+                        ReleaseDate = albumData["attributes"]?["releaseDate"]?.ToObject<DateTime>() ?? DateTime.Now,
+                        Copyright = albumData["attributes"]?["copyright"]?.ToString() ?? "",
+                        Id = albumData["id"]?.ToString() ?? ""
                     };
 
                     // Mapear enlaces de imagen
-                    if (albumData.attributes?.imageLinks != null)
+                    var imageLinks = albumData["attributes"]?["imageLinks"] as JArray;
+                    if (imageLinks != null)
                     {
-                        foreach (var imageLink in albumData.attributes.imageLinks)
+                        foreach (var imageLink in imageLinks)
                         {
-                            newAlbum.ImageLinks.Add((string)imageLink.href);
+                            newAlbum.ImageLinks.Add(imageLink["href"]?.ToString() ?? "");
                         }
                     }
 
                     // Mapear artistas
-                    if (response.included != null)
+                    if (included != null)
                     {
-                        foreach (var artist in response.included)
+                        foreach (var artist in included)
                         {
-                            if (artist.type == "artist")
+                            var artistsRelationships = albumData["relationships"]?["artists"]?["data"] as JArray;
+                            if (artist["type"]?.ToString() == "artists" && artistsRelationships != null &&
+                                artistsRelationships.Any(a => a["id"]?.ToString() == artist["id"]?.ToString()))
                             {
                                 var artistObj = new TidalArtist
                                 {
-                                    Id = artist.id ?? "",
-                                    Name = artist.attributes?.name ?? ""
+                                    Id = artist["id"]?.ToString() ?? "",
+                                    Name = artist["attributes"]?["name"]?.ToString() ?? ""
                                 };
 
                                 // Mapear enlaces de imagen de artistas
-                                if (artist.attributes?.imageLinks != null)
+                                var artistImageLinks = artist["attributes"]?["imageLinks"] as JArray;
+                                if (artistImageLinks != null)
                                 {
-                                    foreach (var artistImage in artist.attributes.imageLinks)
+                                    foreach (var artistImage in artistImageLinks)
                                     {
-                                        artistObj.ImageLinks.Add((string)artistImage.href);
+                                        artistObj.ImageLinks.Add(artistImage["href"]?.ToString() ?? "");
                                     }
                                 }
 
@@ -102,7 +108,7 @@ namespace Tidal_Net.Data.Models
             {
                 Title = albumData.attributes?.title ?? "",
                 BarcodeId = albumData.attributes?.barcodeId ?? "",
-                NumberOfItems = albumData.attributes?.numberOfItems ?? 0,
+                NumberOfTracks = albumData.attributes?.numberOfItems ?? 0,
                 ReleaseDate = albumData.attributes?.releaseDate ?? DateTime.Now,
                 Copyright = albumData.attributes?.copyright ?? "",
                 Id = albumData.id ?? ""
@@ -120,7 +126,7 @@ namespace Tidal_Net.Data.Models
             {
                 foreach (var artist in response.included)
                 {
-                    if (artist.type == "artist")
+                    if (artist.type == "artists")
                     {
                         var artistObj = new TidalArtist
                         {
@@ -142,6 +148,34 @@ namespace Tidal_Net.Data.Models
             }
 
             return album;
+        }
+
+        public static List<TidalTrack> GetTracks(string json)
+        {
+            var response = JObject.Parse(json);
+
+
+
+            var included = response["included"];
+
+            if (included is null)
+                return new();
+            
+            var tracks = new List<TidalTrack>();
+            
+            foreach (var track in included.Where(i => i?["type"]?.ToString() == "tracks"))
+            {
+                var newtrack = new TidalTrack()
+                {
+                    Id = track?["id"]?.ToString() ?? string.Empty,
+                    Title = track?["attributes"]?["title"]?.ToString() ?? string.Empty,
+                    Explicit = (bool?)track?["attributes"]?["explicit"] ?? false
+                };
+                
+                tracks.Add(newtrack);
+            }
+
+            return tracks;
         }
     }
         
