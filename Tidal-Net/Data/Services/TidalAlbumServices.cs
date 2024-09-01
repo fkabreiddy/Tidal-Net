@@ -1,122 +1,64 @@
 ﻿using System.Text.Json;
 using Tidal_Net.Data.Models;
+using Tidal_Net.Data.Utilities;
 
 namespace Tidal_Net.Data.Services;
 
-public class TidalAlbumServices(TidalRequester requester, string market = "US")
+public class TidalAlbumServices(TidalRequester requester, string market = "US") 
 {
     private TidalRequester _requester = requester;
-    public  async Task<TidalResult<List<TidalAlbum>>> GetMany(List<string> albumsIds)
+ 
+    public  async Task<List<TidalAlbum>> GetMany(List<string> albumsIds)
     {
-        try
-        {
-            var parameters = string.Empty;
+       
+        var endpoint = new TidalEndpoints(ManyParamsBuilder.Build(albumsIds), market);
+        
+        var result = await _requester.Request(endpoint.ManyAlbums);
 
-            foreach (var id in albumsIds)
-            {
-                if (id == albumsIds.Last())
-                {
-                    parameters += $"filter%5Bid%5D={id}";
-                }
-                else
-                {
-                    parameters += $"filter%5Bid%5D={id}&";
-                }
-               
-            }
-           
-            
-            var result = await _requester.Request($"albums?countryCode={market.ToUpper()}&include=artists&{parameters}");
+        if (!result.IsSuccessed())
+            return new();
+        
+        var tidalAlbum = TidalAlbum.CreateMany(result.Json);
 
-            if (result.Success && result.Data is string data)
-            {
-                var tidalAlbum = TidalAlbum.CreateMany(data);
+        return tidalAlbum ?? new();
 
-                if (tidalAlbum is not null)
-                {
-                    return new("Operation successfull",tidalAlbum, true);
-                }
-                
-                
-
-            }
-           
-            return new(result.Message);
-            
             
             
 
-        }
-        catch(Exception ex)
-        {
-            return new(ex.InnerException?.Message ?? ex.Message);
-        }
+        
+       
     }
-    public  async Task<TidalResult<TidalAlbum>> GetOne(string albumId)
+    public  async Task<TidalAlbum> GetOne(string albumId)
     {
-        try
-        {
+    
+        var endpoint = new TidalEndpoints(albumId, market);
+        var result = await _requester.Request(endpoint.OneAlbum);
 
-          
-           
-            
-            var result = await _requester.Request($"albums/{albumId}?countryCode={market.ToUpper()}&include=artists");
+        if (!result.IsSuccessed())
+            return new();
+        
+        var tidalAlbum = TidalAlbum.Create(result.Json);
+        return tidalAlbum ?? new();
 
-            if (result.Success && result.Data is string data)
-            {
-                var tidalAlbum = TidalAlbum.Create(data);
-
-                if (tidalAlbum is not null)
-                {
-                    return new("Operation successfull",tidalAlbum, true);
-                }
-                
-                
-
-            }
-           
-            return new(result.Message);
-            
-            
-            
-
-        }
-        catch(Exception ex)
-        {
-            return new(ex.InnerException?.Message ?? ex.Message);
-        }
+       
+      
     }
 
-    public  async Task<TidalResult<List<TidalTrack>>> GetTracks(string albumId)
+    public  async Task<List<TidalTrack>> GetTracks(string albumId)
     {
-        try
-        {
+        
+        var endpoint = new TidalEndpoints(albumId, market);
+        
+        var result = await _requester.Request(endpoint.AlbumTracks);
+
+        if (!result.IsSuccessed())
+            return new();
+        
+        var tracks = TidalAlbum.GetTracks(result.Json);
 
           
-           
-            
-            var result = await _requester.Request($"albums/{albumId}?countryCode={market.ToUpper()}&include=items&include=artists");
-
-            if (result.Success && result.Data is string data)
-            {
-                var tracks = TidalAlbum.GetTracks(data);
-
-              
-                    return new("Operation successfull",tracks, true);
-                
-
-            }
-           
-            return new(result.Message);
-            
-            
-            
-
-        }
-        catch(Exception ex)
-        {
-            return new(ex.InnerException?.Message ?? ex.Message);
-        }
+        return tracks ?? new ();
+        
     }
 
     

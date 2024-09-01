@@ -1,62 +1,40 @@
 ﻿using Tidal_Net.Data.Models;
+using Tidal_Net.Data.Utilities;
 
 namespace Tidal_Net.Data.Services;
 
-public class TidalArtistServices(TidalRequester requester, string market = "US")
+public class TidalArtistServices(TidalRequester requester, string market = "US") 
 {
     private TidalRequester _requester = requester;
 
-    public async Task<TidalResult<TidalArtist>> GetOne(string artistId)
+    public async Task<TidalArtist> GetOne(string artistId)
     {
-        try
-        {
-            var result = await _requester.Request($"artists/{artistId}?countryCode={market.ToUpper()}");
+        
+        var endpoint = new TidalEndpoints(artistId, market);
+        var result = await _requester.Request(endpoint.OneArtist);
 
-            if (!result.Success || result.Data is not string json)
-                return new(result.Message);
+        if (!result.IsSuccessed())
+            return new();
 
-            var artists = TidalArtist.CreateOne(json);
+        var artists = TidalArtist.CreateOne(result.Json);
+        return artists ?? new();
 
-            return new("Success", artists, true);
-
-        }
-        catch(Exception ex)
-        {
-            return new(ex.InnerException?.Message ?? ex.Message);
-        }
+       
     }
-    public async Task<TidalResult<List<TidalArtist>>> GetMany(List<string> artistIds)
+    public async Task<List<TidalArtist>> GetMany(List<string> artistIds)
     {
-        try
-        {
-            
-            var parameters = string.Empty;
+        
+        var endpoint = new TidalEndpoints(ManyParamsBuilder.Build(artistIds), market);
+        
+        var result = await _requester.Request(endpoint.ManyArtists);
+        
+        if (!result.IsSuccessed())
+            return new();
+        
+        var artists = TidalArtist.CreateMany(result.Json);
+        
+        return  artists ?? new();
 
-            foreach (var id in artistIds)
-            {
-                if (id == artistIds.Last())
-                {
-                    parameters += $"filter%5Bid%5D={id}";
-                }
-                else
-                {
-                    parameters += $"filter%5Bid%5D={id}&";
-                }
-               
-            }
-            var result = await _requester.Request($"artists?countryCode={market.ToUpper()}&{parameters}");
-
-            if (!result.Success || result.Data is not string json)
-                return new(result.Message);
-
-            var artists = TidalArtist.CreateMany(json);
-
-            return new("Success", artists, true);
-
-        }
-        catch(Exception ex)
-        {
-            return new(ex.InnerException?.Message ?? ex.Message);
-        }
+       
     }
 }

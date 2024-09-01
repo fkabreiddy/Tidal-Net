@@ -5,6 +5,12 @@ VisualStudioVersion = 17.8.34330.188
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tidal-Net", "Tidal-Net\Tidal-Net.csproj", "{777EA84C-ADCF-43E4-8516-1FBBE09C03B5}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TidalApi.Web", "TidalApi.Web", "{03FFB8E5-8454-4E72-80FF-ECCD47363BC6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TidalApi.Test", "TidalApi.Test", "{FEFD63A9-8BC6-48E2-8F62-754C3E24EEB6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TidalTest", "TidalTest\TidalTest.csproj", "{47B2E961-BDE1-4C64-8FA7-89EE04D950FA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,11 +21,19 @@ Global
 		{777EA84C-ADCF-43E4-8516-1FBBE09C03B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{777EA84C-ADCF-43E4-8516-1FBBE09C03B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{777EA84C-ADCF-43E4-8516-1FBBE09C03B5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{47B2E961-BDE1-4C64-8FA7-89EE04D950FA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{47B2E961-BDE1-4C64-8FA7-89EE04D950FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{47B2E961-BDE1-4C64-8FA7-89EE04D950FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{47B2E961-BDE1-4C64-8FA7-89EE04D950FA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {34A838AC-A683-41C4-9529-493E316C43A5}
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{777EA84C-ADCF-43E4-8516-1FBBE09C03B5} = {03FFB8E5-8454-4E72-80FF-ECCD47363BC6}
+		{47B2E961-BDE1-4C64-8FA7-89EE04D950FA} = {FEFD63A9-8BC6-48E2-8F62-754C3E24EEB6}
 	EndGlobalSection
 EndGlobal

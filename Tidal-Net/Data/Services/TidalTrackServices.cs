@@ -1,63 +1,42 @@
 ﻿using Tidal_Net.Data.Models;
+using Tidal_Net.Data.Utilities;
 
 namespace Tidal_Net.Data.Services;
 
-public class TidalTrackServices(TidalRequester requester, string market = "US")
+public class TidalTrackServices(TidalRequester requester, string market = "US") 
 {
     private TidalRequester _requester = requester;
 
-    public async Task<TidalResult<TidalTrack>> GetOne(string trackId)
+    public async Task<TidalTrack> GetOne(string trackId)
     {
-        try
-        {
-            var result = await _requester.Request($"tracks/{trackId}?countryCode={market.ToUpper()}");
+        
+        var endpoint = new TidalEndpoints(trackId, market);
+        var result = await _requester.Request(endpoint.OneTrack);
 
-            if (!result.Success || result.Data is not string json)
-                return new(result.Message);
+        if (!result.IsSuccessed())
+            return new();
 
-            var tracks = TidalTrack.CreateOne(json);
+        var tracks = TidalTrack.CreateOne(result.Json);
 
-            return new("Success", tracks, true);
+        return tracks ?? new();
 
-        }
-        catch(Exception ex)
-        {
-            return new(ex.InnerException?.Message ?? ex.Message);
-
-        }
+       
     }
     
-    public async Task<TidalResult<List<TidalTrack>>> GetManyTracks(List<string> trackIds)
+    public async Task<List<TidalTrack>> GetManyTracks(List<string> trackIds)
     {
-        try
-        {
-            var parameters = string.Empty;
+         
+        var endpoint  = new TidalEndpoints(ManyParamsBuilder.Build(trackIds), market);
+        
+        var result = await _requester.Request(endpoint.ManyTracks);
 
-            foreach (var id in trackIds)
-            {
-                if (id == trackIds.Last())
-                {
-                    parameters += $"filter%5Bid%5D={id}";
-                }
-                else
-                {
-                    parameters += $"filter%5Bid%5D={id}&";
-                }
-            }
+        if (!result.IsSuccessed())
+            return new();
 
-            var result = await _requester.Request($"tracks?countryCode={market.ToUpper()}&{parameters}");
+        var tracks = TidalTrack.CreateMany(result.Json);
 
-            if (!result.Success || result.Data is not string json)
-                return new(result.Message);
-
-            var tracks = TidalTrack.CreateMany(json);
-
-            return new("Success", tracks, true);
-        }
-        catch(Exception ex)
-        {
-            return new(ex.InnerException?.Message ?? ex.Message);
-        }
+        return tracks ?? new();
+        
     }
 
     
