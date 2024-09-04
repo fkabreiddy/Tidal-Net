@@ -1,18 +1,27 @@
 ﻿
 using System.Net.Http.Headers;
-using Tidal_Net.Authentication;
-using Tidal_Net.Data.Services;
+using Tidal_Net.Data.Interfaces;
 
 namespace Tidal_Net.Data
 {
-    public  class TidalRequester (HttpClient client)
+    public  class TidalRequester : ITidalRequester
     {
-        private readonly HttpClient _httpClient = client;
+        private readonly HttpClient _httpClient;
+        private string? Token { get; set; } 
+
+        public TidalRequester(IHttpClientFactory clientFactory)
+        {
+            this._httpClient = clientFactory.CreateClient("TidalApiClient");
+        }
+      
         public  async Task<TidalResponse> Request(string endPoint)
         {
             try
             {
 
+                
+                _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", 
+                    Token ?? throw new ArgumentNullException(nameof(Token)) );
 
                 HttpResponseMessage response = await _httpClient.GetAsync(endPoint);
 
@@ -20,26 +29,39 @@ namespace Tidal_Net.Data
                 {
                     // Read the content of the response
                     var value = await response.Content.ReadAsStringAsync();
-                    return new("Operation Successful", value, response.IsSuccessStatusCode);
+                    return new
+                    (
+                        response.ReasonPhrase ?? "Success", 
+                        value, 
+                        response.IsSuccessStatusCode
+                    );
                 }
                 else
                 {
                     // Handle non-success status codes if needed
-                    return new("Operation Failed", string.Empty, response.IsSuccessStatusCode);
+                    return new(response.ReasonPhrase ?? "Operation Failed", 
+                        string.Empty, 
+                        response.IsSuccessStatusCode
+                    );
                 }
             }
             catch (HttpRequestException httpRequestException)
             {
                 // Handle HTTP request-specific exceptions
                 // Consider logging or handling the exception
-                return new("Request Failed", httpRequestException.Message, false);
+                return new(httpRequestException.Message, string.Empty, false);
             }
             catch (Exception e)
             {
                 // Handle general exceptions
                 // Consider logging or handling the exception
-                return new("An Error Occurred", e.Message, false);
+                return new(e.InnerException?.Message ?? e.Message, string.Empty, false);
             }
+        }
+
+        public void SetToken(string token)
+        {
+            this.Token = token;
         }
         
         
