@@ -1,0 +1,6 @@
+@TidalApi.Web.Core.Test_HostAddress = http://localhost:5044
+
+GET {{TidalApi.Web.Core.Test_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

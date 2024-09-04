@@ -4,7 +4,7 @@
 
 //on top of Program.cs before your custom services
 
-using TidalApi.Web.IoC; //import this directory
+using TidalApi.Web.Core.IoC; //import this directory
 
 builder.Services.AddTidalWebApiServices();
 
@@ -16,8 +16,8 @@ builder.Services.AddTidalWebApiServices();
 
 //first create a custom service 
 
-using TidalApi.Web.Interfaces;
-using TidalApi.Web.Models;
+using TidalApi.Web.Core.Data.Interfaces;
+using TidalApi.Web.Core.Data.Models;
 
 public class MyTidalWebService()
 {
@@ -54,7 +54,7 @@ public class MyTidalWebService()
 //for blazor you can inject the services on components
 
 //on _Imports.razor
-@using TidalApi.Web.Interfaces
+@using TidalApi.Web.Core.Data.Interfaces
 @inject ITidalClient tidalClient
 @inject ITidalTokenBuilder tokenBuilder  
 
