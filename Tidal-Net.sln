@@ -3,11 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34330.188
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tidal-Net", "Tidal-Net\Tidal-Net.csproj", "{777EA84C-ADCF-43E4-8516-1FBBE09C03B5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TidalApi.Web.Core", "TidalApi.Web.Core\TidalApi.Web.Core.csproj", "{777EA84C-ADCF-43E4-8516-1FBBE09C03B5}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TidalApi.Web", "TidalApi.Web", "{03FFB8E5-8454-4E72-80FF-ECCD47363BC6}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TidalApi.Web.Core", "TidalApi.Web.Core", "{03FFB8E5-8454-4E72-80FF-ECCD47363BC6}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TidalApi.Test", "TidalApi.Test", "{FEFD63A9-8BC6-48E2-8F62-754C3E24EEB6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TidalApi.Web.Core.Test", "TidalApi.Web.Core.Test\TidalApi.Web.Core.Test.csproj", "{22FF1339-C25E-4B07-8F1C-6534566D08B5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,6 +21,10 @@ Global
 		{777EA84C-ADCF-43E4-8516-1FBBE09C03B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{777EA84C-ADCF-43E4-8516-1FBBE09C03B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{777EA84C-ADCF-43E4-8516-1FBBE09C03B5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{22FF1339-C25E-4B07-8F1C-6534566D08B5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{22FF1339-C25E-4B07-8F1C-6534566D08B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{22FF1339-C25E-4B07-8F1C-6534566D08B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{22FF1339-C25E-4B07-8F1C-6534566D08B5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -28,5 +34,6 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{777EA84C-ADCF-43E4-8516-1FBBE09C03B5} = {03FFB8E5-8454-4E72-80FF-ECCD47363BC6}
+		{22FF1339-C25E-4B07-8F1C-6534566D08B5} = {FEFD63A9-8BC6-48E2-8F62-754C3E24EEB6}
 	EndGlobalSection
 EndGlobal

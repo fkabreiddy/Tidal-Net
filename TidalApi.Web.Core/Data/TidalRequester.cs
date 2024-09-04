@@ -1,8 +1,7 @@
-﻿
-using System.Net.Http.Headers;
-using Tidal_Net.Data.Interfaces;
+﻿using System.Net.Http.Headers;
+using TidalApi.Web.Core.Data.Interfaces;
 
-namespace Tidal_Net.Data
+namespace TidalApi.Web.Core.Data
 {
     public  class TidalRequester : ITidalRequester
     {

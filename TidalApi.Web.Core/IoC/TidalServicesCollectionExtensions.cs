@@ -1,12 +1,11 @@
 ﻿using System.Net.Http.Headers;
-using System.Text;
 using Microsoft.Extensions.DependencyInjection;
-using Tidal_Net.Authentication;
-using Tidal_Net.Data;
-using Tidal_Net.Data.Interfaces;
-using Tidal_Net.Data.Services;
+using TidalApi.Web.Core.Authentication;
+using TidalApi.Web.Core.Data;
+using TidalApi.Web.Core.Data.Interfaces;
+using TidalApi.Web.Core.Data.Services;
 
-namespace Tidal_Net.IoC;
+namespace TidalApi.Web.Core.IoC;
 
 public static class TidalServicesCollectionExtensions
 {

@@ -1,8 +1,8 @@
-﻿using Tidal_Net.Data.Interfaces;
-using Tidal_Net.Data.Models;
-using Tidal_Net.Data.Utilities;
+﻿using TidalApi.Web.Core.Data.Interfaces;
+using TidalApi.Web.Core.Data.Models;
+using TidalApi.Web.Core.Data.Utilities;
 
-namespace Tidal_Net.Data.Services;
+namespace TidalApi.Web.Core.Data.Services;
 
 public class TidalArtistServices(ITidalRequester requester) : ITidalArtistServices
 {

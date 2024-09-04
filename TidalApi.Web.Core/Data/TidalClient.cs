@@ -1,7 +1,7 @@
 ﻿
-using Tidal_Net.Data.Interfaces;
+using TidalApi.Web.Core.Data.Interfaces;
 
-namespace Tidal_Net.Data;
+namespace TidalApi.Web.Core.Data;
 
 public class TidalClient(
     ITidalAlbumServices albumServices,

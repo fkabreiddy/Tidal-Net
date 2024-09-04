@@ -1,10 +1,8 @@
-﻿
-using System.Net.Http.Headers;
+﻿using System.Net.Http.Headers;
 using System.Text;
-using Tidal_Net.Data;
-using Tidal_Net.Data.Interfaces;
+using TidalApi.Web.Core.Data.Interfaces;
 
-namespace Tidal_Net.Authentication
+namespace TidalApi.Web.Core.Authentication
 {
     public class TidalTokenBuilder : ITidalTokenBuilder
     {
@@ -34,7 +32,7 @@ namespace Tidal_Net.Authentication
                     var responseObject = Newtonsoft.Json.JsonConvert.DeserializeObject<dynamic>(responseBody);
 
                     if (responseObject is null || string.IsNullOrEmpty(responseObject.access_token.ToString()))
-                        return null;
+                        return response.ReasonPhrase ?? "There was a problem requesting the token. Check the credentials provided.";
                         
                     return responseObject?.access_token.ToString();
 

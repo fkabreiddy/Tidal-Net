@@ -1,9 +1,7 @@
-﻿
-
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace Tidal_Net.Data.Models
+namespace TidalApi.Web.Core.Data.Models
 {
     public class TidalAlbum
     {

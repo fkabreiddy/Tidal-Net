@@ -1,7 +1,6 @@
-﻿using System.Text.Json.Serialization;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
-namespace Tidal_Net.Data.Models;
+namespace TidalApi.Web.Core.Data.Models;
 
 public class TidalArtist
 {

@@ -1,6 +1,6 @@
-﻿using Tidal_Net.Data.Models;
+﻿using TidalApi.Web.Core.Data.Models;
 
-namespace Tidal_Net.Data.Interfaces;
+namespace TidalApi.Web.Core.Data.Interfaces;
 
 public interface ITidalArtistServices
 {

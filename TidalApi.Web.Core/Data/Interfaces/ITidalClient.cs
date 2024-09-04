@@ -1,4 +1,4 @@
-﻿namespace Tidal_Net.Data.Interfaces;
+﻿namespace TidalApi.Web.Core.Data.Interfaces;
 
 public interface ITidalClient
 {

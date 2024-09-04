@@ -1,7 +1,4 @@
-﻿using Tidal_Net.Authentication;
-using Tidal_Net.Data.Services;
-
-namespace Tidal_Net.Data;
+﻿namespace TidalApi.Web.Core.Data;
 
 public class TidalResponse(string message, string json, bool success = default)
 {

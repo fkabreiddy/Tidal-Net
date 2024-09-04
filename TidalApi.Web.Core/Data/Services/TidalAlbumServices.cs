@@ -1,9 +1,8 @@
-﻿using System.Text.Json;
-using Tidal_Net.Data.Interfaces;
-using Tidal_Net.Data.Models;
-using Tidal_Net.Data.Utilities;
+﻿using TidalApi.Web.Core.Data.Interfaces;
+using TidalApi.Web.Core.Data.Models;
+using TidalApi.Web.Core.Data.Utilities;
 
-namespace Tidal_Net.Data.Services;
+namespace TidalApi.Web.Core.Data.Services;
 
 public class TidalAlbumServices(ITidalRequester requester) : ITidalAlbumServices
 {
@@ -56,15 +55,14 @@ public class TidalAlbumServices(ITidalRequester requester) : ITidalAlbumServices
         
         var endpoint = new TidalEndpoints(albumId, market);
         
-        
+        _requester.SetToken(token);
         var result = await _requester.Request(endpoint.AlbumTracks);
 
         if (!result.IsSuccessed())
             return new();
         
         var tracks = TidalAlbum.GetTracks(result.Json);
-
-          
+        
         return tracks ?? new ();
         
     }

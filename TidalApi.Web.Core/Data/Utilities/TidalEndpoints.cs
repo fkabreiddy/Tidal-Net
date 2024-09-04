@@ -1,4 +1,4 @@
-﻿namespace Tidal_Net.Data.Utilities;
+﻿namespace TidalApi.Web.Core.Data.Utilities;
 
 public class TidalEndpoints(string parameters, string market)
 {
